@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "Todududu",
+    "slug": "Todududu",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/app_icon.jpg",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/app_icon.jpg",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.rohanxobruno.Todududu"
+    },
+    "web": {
+      "favicon": "./assets/app_icon.jpg"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a2c301bc-ba1f-494d-af60-fdb226279074"
+      }
+    }
+  }
+}
