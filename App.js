@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { View,ScrollView, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Animated, ImageBackground} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, FlatList, Animated, ImageBackground, SafeAreaView} from "react-native";
 import { supabase } from "./supabase";
 import { GestureHandlerRootView, PanGestureHandler } from "react-native-gesture-handler";
 import {AntDesign} from '@expo/vector-icons';
+import styles from './Styles'; 
+import { StatusBar } from "react-native";
 
 const App = () => {
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState("");
   const [showAdd, setShowAdd] = useState(false);
 
-  const image = require('./assets/background_1.jpg');
+  const image = require('./assets/moon_2.jpg');
 
   useEffect(() => {
     fetchTodos();
@@ -112,162 +114,51 @@ const App = () => {
   };
 
   return (
-    <GestureHandlerRootView style={styles.container}>
-      <View style={styles.card}>
-        {/* <ImageBackground source={image} style={styles.container}> */}
-        <Text style={styles.heading}>Today's Todududu</Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#ff6347" }}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+        <ImageBackground source={image} style={styles.background} resizeMode="cover">
+          <View style={styles.container}>
+            <Text style={styles.heading}>Today's Todududu</Text>
 
-        <View style={styles.listContainer}>
-          <FlatList
-            data={todos}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderTodo}
-            contentContainerStyle={styles.listContent}
-          />
-        </View>
+            <View style={styles.listContainer}>
+              <FlatList
+                data={todos}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={renderTodo}
+                style={styles.listContent}
+              />
+            </View>
 
-        {showAdd && (
-          <View style={styles.addTodoContainer}>
-            <TextInput
-              value={title}
-              onChangeText={setTitle}
-              placeholder="Add a task..."
-              style={styles.input}
-              placeholderTextColor='#9696d6'
+            {showAdd && (
+              <View style={styles.addTodoContainer}>
+                <TextInput
+                  value={title}
+                  onChangeText={setTitle}
+                  placeholder="Add a task..."
+                  style={styles.input}
+                  placeholderTextColor= '#000'
+                />
+                <TouchableOpacity onPress={addTodo} style={styles.addButton}>
+                  <AntDesign name='arrowright' size={20} color='black'/>
+                </TouchableOpacity>
 
-            />
-            <TouchableOpacity onPress={addTodo} style={styles.addButton}>
-              <AntDesign name='arrowright' size={20} color='black'/>
-            </TouchableOpacity>
+                <TouchableOpacity onPress={showAddTodo} style={styles.addTodoButtonWhenShow}>
+                  <AntDesign name="minus" size={20} color='#000' />
+                </TouchableOpacity>
+              </View>
+            )}
 
-            <TouchableOpacity onPress={showAddTodo} style={styles.addTodoButtonWhenShow}>
-              <AntDesign name="minus" size={18} color='#000' />
-            </TouchableOpacity>
+            {!showAdd && (
+              <TouchableOpacity onPress={showAddTodo} style={styles.addTodoButton}>
+                <AntDesign name="plus" size={20} color='#000' />
+              </TouchableOpacity>
+            )}
           </View>
-        )}
-
-        {!showAdd && (
-          <TouchableOpacity onPress={showAddTodo} style={styles.addTodoButton}>
-            <AntDesign name="plus" size={18} color='#000' />
-          </TouchableOpacity>
-        )}
-      {/* </ImageBackground> */}
-      </View>
-    </GestureHandlerRootView>
+        </ImageBackground>
+      </GestureHandlerRootView>
+    </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    backgroundColor: "#f0f0f0",
-  },
-  card: {
-    width: "100%",
-    maxWidth: 400,
-    padding: 20,
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    shadowOffset: { width: 0, height: 2 },
-    flex: 1,
-  },
-  listContainer: {
-    flex: 1,
-  },
-  listContent: {
-    paddingBottom: 100,
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  todoItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#f9f9f9",
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  todoText: {
-    fontSize: 16,
-    color: "#333",
-  },
-  completedTodo: {
-    textDecorationLine: "line-through",
-    color: "#888",
-  },
-  addTodoContainer: {
-    flexDirection: "row",
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  input: {
-    padding: 10,
-    width: 290,
-    height: 40,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 10,
-    marginRight: 14,
-  },
-  addButton: {
-    backgroundColor: "#a4d2db",
-    height: 40,
-    width: 40,
-    padding: 10,
-    borderRadius: 10,
-    opacity: 0.7,
-  },
-  addButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  addTodoButton: {
-    position: "absolute",
-    bottom: 30,
-    right: 20,
-    width: 40,
-    height: 40,
-    borderRadius: 100,
-    backgroundColor: "#edb4cc	",
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  addTodoButtonWhenShow: {
-    position: "absolute",
-    bottom: 55,
-    right: 0,
-    width: 40,
-    height: 40,
-    borderRadius: 100,
-    backgroundColor: "#edb4cc",
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  addTodoText: {
-    fontSize: 25,
-    color: "#000000",
-    textAlign: "center",
-  },
-});
 
 export default App;
